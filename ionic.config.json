@@ -1,0 +1,7 @@
+{
+  "name": "Währungsrechner",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
