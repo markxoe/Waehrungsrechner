@@ -22,7 +22,7 @@ import {
   IonSelectOption,
   IonProgressBar,
 } from "@ionic/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Home: React.FC = () => {
   const [waehrungen, setWaehrungen] = useState<string[]>([]);
@@ -68,6 +68,18 @@ const Home: React.FC = () => {
     setisloading(false);
   };
 
+  const calc = () => {
+    if (InputVal !== undefined) {
+      if (InputWaehrung !== "" && OutputWaehrung !== "") {
+        setOutputVal(
+          InputVal / (allRates[InputWaehrung] / allRates[OutputWaehrung])
+        );
+      }
+    } else {
+      setOutputVal(undefined);
+    }
+  };
+
   const addToast = (msg: string, duration: number = 2000) => {
     let element = document.createElement("ion-toast");
     element.message = msg;
@@ -87,7 +99,12 @@ const Home: React.FC = () => {
     };
     return c[inp] ?? "Mmmh";
   };
-
+  useEffect(() => calc(), [
+    { OutputWaehrung },
+    { InputWaehrung },
+    { InputVal },
+    { dataDate },
+  ]);
   return (
     <IonPage>
       <IonHeader>
@@ -115,11 +132,12 @@ const Home: React.FC = () => {
                       placeholder="Eingabe"
                       type="number"
                       value={InputVal}
-                      onIonChange={(e) =>
+                      onIonChange={(e) => {
                         setInputVal(
                           e.detail.value ? parseInt(e.detail.value) : undefined
-                        )
-                      }
+                        );
+                        calc();
+                      }}
                     />
                     <IonSelect
                       interfaceOptions={{
@@ -128,7 +146,10 @@ const Home: React.FC = () => {
                       placeholder="Währung"
                       cancelText="Ne, lass"
                       okText="Ja, OK"
-                      onIonChange={(e) => setInputWaehrung(e.detail.value)}
+                      onIonChange={(e) => {
+                        setInputWaehrung(e.detail.value);
+                        calc();
+                      }}
                     >
                       {waehrungen.map((e) => (
                         <IonSelectOption key={e} value={e}>
@@ -174,7 +195,7 @@ const Home: React.FC = () => {
                   <IonItem>
                     <IonInput
                       placeholder="Ausgabe"
-                      value={OutputVal}
+                      value={OutputVal?.toFixed(4)}
                       disabled={true}
                     />
                     <IonSelect
@@ -185,7 +206,10 @@ const Home: React.FC = () => {
                       placeholder="Währung"
                       cancelText="Ne, lass"
                       okText="Ja, OK"
-                      onIonChange={(e) => setOutputWaehrung(e.detail.value)}
+                      onIonChange={(e) => {
+                        setOutputWaehrung(e.detail.value);
+                        calc();
+                      }}
                     >
                       {waehrungen.map((e) => (
                         <IonSelectOption key={e} value={e}>
