@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Währungsrechner</string>
+    <string name="title_activity_main">Währungsrechner</string>
+    <string name="package_name">org.toastbrot.waehrungsrechner</string>
+    <string name="custom_url_scheme">org.toastbrot.waehrungsrechner</string>
+</resources>
