@@ -24,6 +24,7 @@ import {
 } from "@ionic/react";
 import React, { useState, useEffect } from "react";
 
+import darkmode from "../functions/darkmode";
 const Home: React.FC = () => {
   const [waehrungen, setWaehrungen] = useState<string[]>([]);
   const [isloading, setisloading] = useState(false);
@@ -99,6 +100,7 @@ const Home: React.FC = () => {
     };
     return c[inp] ?? "Mmmh";
   };
+  darkmode.init();
   useEffect(() => calc(), [
     { OutputWaehrung },
     { InputWaehrung },
@@ -247,7 +249,11 @@ const Home: React.FC = () => {
                 <IonCardContent>
                   <IonItem>
                     <IonLabel>Dark Mode</IonLabel>
-                    <IonToggle color="medium" />
+                    <IonToggle
+                      onIonChange={(e) => darkmode.set(e.detail.checked)}
+                      checked={darkmode.isDarkMode}
+                      color="medium"
+                    />
                   </IonItem>
                 </IonCardContent>
               </IonCard>
