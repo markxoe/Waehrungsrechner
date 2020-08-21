@@ -14,9 +14,8 @@
 3. Installation von Ionic mit `npm install -g @ionic/cli`
 4. Benötigte npm Pakete mit `npm i` installieren
 5. Einen Build mit `ionic build` machen
-
-- [ ] TODO: Android support
-- [ ] TODO: Icons & Splash
+6. Android synchronisieren mit `ionic cap sync`
+7. Android Studio öffnen mit `ionic cap open android`
 
 ## Autor
 
