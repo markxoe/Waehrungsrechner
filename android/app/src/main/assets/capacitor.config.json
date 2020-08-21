@@ -1,0 +1,13 @@
+{
+  "appId": "org.toastbrot.waehrungsrechner",
+  "appName": "Währungsrechner",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "build",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    }
+  },
+  "cordova": {}
+}
