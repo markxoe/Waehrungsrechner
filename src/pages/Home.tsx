@@ -25,19 +25,67 @@ import {
 import React, { useState } from "react";
 
 const Home: React.FC = () => {
-  const waehrungen = ["EUR", "USD"];
-
+  const [waehrungen, setWaehrungen] = useState<string[]>([]);
   const [isloading, setisloading] = useState(false);
+  const [InputVal, setInputVal] = useState<number | undefined>(undefined);
+  const [OutputVal, setOutputVal] = useState<number | undefined>(undefined);
+  const [InputWaehrung, setInputWaehrung] = useState<string>("");
+  const [OutputWaehrung, setOutputWaehrung] = useState<string>("");
+
+  const [dataDate, setDataDate] = useState<string>("Laden...");
+  const [allRates, setAllRates] = useState<{ [id: string]: number }>({});
+  const loadData = async () => {
+    setisloading(true);
+    const data = await fetch("https://api.exchangeratesapi.io/latest").then(
+      (e) => e,
+      () => null
+    );
+    if (data !== null) {
+      if (data.status === 200) {
+        const daa: string = await data.text();
+        const jsondata: {
+          rates: { [id: string]: number };
+          base: string;
+          date: string;
+        } = JSON.parse(daa);
+
+        setDataDate(jsondata.date);
+
+        var _allRates = jsondata.rates;
+        _allRates[jsondata.base] = 1;
+        setAllRates(_allRates);
+
+        const _waeherungen: string[] = Object.keys(_allRates);
+        setWaehrungen(_waeherungen);
+
+        addToast("Daten Geladen");
+      } else {
+        addToast("Fehler beim Laden: " + data.status);
+      }
+    } else {
+      addToast("Fehler beim Laden");
+    }
+    setisloading(false);
+  };
+
+  const addToast = (msg: string, duration: number = 2000) => {
+    let element = document.createElement("ion-toast");
+    element.message = msg;
+    element.duration = duration;
+    element.buttons = [{ text: "OK", role: "cancel" }];
+    document.body.appendChild(element);
+    element.present();
+  };
 
   const getAka = (inp: string) => {
-    switch (inp) {
-      case "EUR":
-        return "Euro";
-      case "USD":
-        return "US Dollar";
-      default:
-        return "Mmh";
-    }
+    var c: { [id: string]: string } = {
+      CAD: "Kanadischer Dollar",
+      HKD: "Hongkong Dollar",
+      EUR: "Euro",
+      USD: "US Dollar",
+      CHF: "Schweizer Franken",
+    };
+    return c[inp] ?? "Mmmh";
   };
 
   return (
@@ -63,7 +111,16 @@ const Home: React.FC = () => {
                 </IonCardHeader>
                 <IonCardContent>
                   <IonItem>
-                    <IonInput placeholder="Eingabe" />
+                    <IonInput
+                      placeholder="Eingabe"
+                      type="number"
+                      value={InputVal}
+                      onIonChange={(e) =>
+                        setInputVal(
+                          e.detail.value ? parseInt(e.detail.value) : undefined
+                        )
+                      }
+                    />
                     <IonSelect
                       interfaceOptions={{
                         header: "Währung",
@@ -71,9 +128,12 @@ const Home: React.FC = () => {
                       placeholder="Währung"
                       cancelText="Ne, lass"
                       okText="Ja, OK"
+                      onIonChange={(e) => setInputWaehrung(e.detail.value)}
                     >
                       {waehrungen.map((e) => (
-                        <IonSelectOption value={e}>{getAka(e)}</IonSelectOption>
+                        <IonSelectOption key={e} value={e}>
+                          {getAka(e)}
+                        </IonSelectOption>
                       ))}
                     </IonSelect>
                   </IonItem>
@@ -97,7 +157,9 @@ const Home: React.FC = () => {
                     okText="Ja, OK"
                   >
                     {waehrungen.map((e) => (
-                      <IonSelectOption value={e}>{getAka(e)}</IonSelectOption>
+                      <IonSelectOption key={e} value={e}>
+                        {getAka(e)}
+                      </IonSelectOption>
                     ))}
                   </IonSelect>
                 </IonCardContent>
@@ -110,7 +172,11 @@ const Home: React.FC = () => {
                 </IonCardHeader>
                 <IonCardContent>
                   <IonItem>
-                    <IonInput placeholder="Ausgabe" disabled={true} />
+                    <IonInput
+                      placeholder="Ausgabe"
+                      value={OutputVal}
+                      disabled={true}
+                    />
                     <IonSelect
                       interfaceOptions={{
                         header: "Währung",
@@ -119,9 +185,12 @@ const Home: React.FC = () => {
                       placeholder="Währung"
                       cancelText="Ne, lass"
                       okText="Ja, OK"
+                      onIonChange={(e) => setOutputWaehrung(e.detail.value)}
                     >
                       {waehrungen.map((e) => (
-                        <IonSelectOption value={e}>{getAka(e)}</IonSelectOption>
+                        <IonSelectOption key={e} value={e}>
+                          {getAka(e)}
+                        </IonSelectOption>
                       ))}
                     </IonSelect>
                   </IonItem>
@@ -134,13 +203,13 @@ const Home: React.FC = () => {
                   <IonCardTitle>Status</IonCardTitle>
                 </IonCardHeader>
                 <IonCardContent>
-                  <h2>Daten sind Aktuell vom 19.08.2020</h2>
+                  <h2>Daten sind Aktuell vom {dataDate}</h2>
                   <IonText>
                     Hinweis: Die Daten werden nur täglich erneuert
                   </IonText>
                   <br />
                   <br />
-                  <IonButton onClick={() => setisloading((e) => !e)}>
+                  <IonButton onClick={() => loadData()}>
                     Aktualisieren
                   </IonButton>
                 </IonCardContent>
