@@ -183,11 +183,13 @@ const Home: React.FC = () => {
                         calc();
                       }}
                     >
-                      {waehrungen.map((e) => (
-                        <IonSelectOption key={e} value={e}>
-                          {getAka(e)}
-                        </IonSelectOption>
-                      ))}
+                      {waehrungen
+                        .sort((a, b) => getAka(a).localeCompare(getAka(b)))
+                        .map((e) => (
+                          <IonSelectOption key={e} value={e}>
+                            {getAka(e)}
+                          </IonSelectOption>
+                        ))}
                     </IonSelect>
                   </IonItem>
                 </IonCardContent>
