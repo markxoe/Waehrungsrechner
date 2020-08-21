@@ -98,6 +98,34 @@ const Home: React.FC = () => {
       EUR: "Euro",
       USD: "US Dollar",
       CHF: "Schweizer Franken",
+      AUD: "Australischer Dollar",
+      BGN: "Lew",
+      BRL: "Brasilianischer Real",
+      CNY: "Chinesisher Yuan",
+      CZK: "Tschechische Krone",
+      DKK: "Dänische Krone",
+      GBP: "Pfund",
+      HRK: "Kroatische Kuna",
+      HUF: "Korint",
+      IDR: "Indonesische Rupiah",
+      ILS: "Schekel",
+      INR: "Indische Rupie",
+      ISK: "Isländische Krone",
+      JPY: "Yen",
+      KRW: "Südkoreanischer Won",
+      MXN: "Mexikanischer Peso",
+      MYR: "Malaysischer Ringgit",
+      NOK: "Norwegische Krone",
+      NZD: "Neuseeland Dollar",
+      PHP: "Philippinischer Peso",
+      PLN: "Złoty",
+      RON: "Rumänischer Leu",
+      RUB: "Russischer Rubel",
+      SEK: "Schwedische Krone",
+      SGD: "Singapur-Dollar",
+      THB: "Baht",
+      TRY: "Türkische Lira",
+      ZAR: "Südafrikanischer Rand",
     };
     return c[inp] ?? "Mmmh";
   };
@@ -165,31 +193,6 @@ const Home: React.FC = () => {
                 </IonCardContent>
               </IonCard>
             </IonCol>
-            <IonCol hidden={true} sizeMd="6" size="12">
-              <IonCard>
-                <IonCardHeader>
-                  <IonCardTitle>Eingabe</IonCardTitle>
-                </IonCardHeader>
-                <IonCardContent>
-                  <IonInput placeholder="Eingabe" />
-
-                  <IonSelect
-                    interfaceOptions={{
-                      header: "Währung",
-                    }}
-                    placeholder="Währung"
-                    cancelText="Ne, lass"
-                    okText="Ja, OK"
-                  >
-                    {waehrungen.map((e) => (
-                      <IonSelectOption key={e} value={e}>
-                        {getAka(e)}
-                      </IonSelectOption>
-                    ))}
-                  </IonSelect>
-                </IonCardContent>
-              </IonCard>
-            </IonCol>
             <IonCol sizeMd="6" size="12">
               <IonCard>
                 <IonCardHeader>
@@ -215,11 +218,13 @@ const Home: React.FC = () => {
                         calc();
                       }}
                     >
-                      {waehrungen.map((e) => (
-                        <IonSelectOption key={e} value={e}>
-                          {getAka(e)}
-                        </IonSelectOption>
-                      ))}
+                      {waehrungen
+                        .sort((a, b) => getAka(a).localeCompare(getAka(b)))
+                        .map((e) => (
+                          <IonSelectOption key={e} value={e}>
+                            {getAka(e)}
+                          </IonSelectOption>
+                        ))}
                     </IonSelect>
                   </IonItem>
                 </IonCardContent>
