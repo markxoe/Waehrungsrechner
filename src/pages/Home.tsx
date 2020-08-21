@@ -14,7 +14,6 @@ import {
   IonCardContent,
   IonSelect,
   IonInput,
-  IonSlide,
   IonLabel,
   IonButton,
   IonText,
@@ -36,6 +35,7 @@ const Home: React.FC = () => {
 
   const [dataDate, setDataDate] = useState<string>("Laden...");
   const [allRates, setAllRates] = useState<{ [id: string]: number }>({});
+
   const loadData = async () => {
     setisloading(true);
     const data = await fetch("https://api.exchangeratesapi.io/latest").then(
@@ -51,7 +51,7 @@ const Home: React.FC = () => {
           date: string;
         } = JSON.parse(daa);
 
-        setDataDate(jsondata.date);
+        setDataDate(new Date(jsondata.date).toLocaleDateString());
 
         var _allRates = jsondata.rates;
         _allRates[jsondata.base] = 1;
