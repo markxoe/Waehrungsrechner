@@ -1,4 +1,12 @@
+import groovy.json.JsonSlurper
 apply plugin: 'com.android.application'
+
+def getVersionFromNpm() {
+    def inputFile = new File("$rootDir/../package.json")
+    def packageJson = new JsonSlurper().parseText(inputFile.text)
+
+    return packageJson["version"]
+}
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -7,7 +15,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "0.0.1"
+        versionName getVersionFromNpm()
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
