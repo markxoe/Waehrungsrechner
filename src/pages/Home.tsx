@@ -25,6 +25,9 @@ import {
 import React, { useState, useEffect } from "react";
 
 import darkmode from "../functions/darkmode";
+
+import packageJson from "../../package.json";
+
 const Home: React.FC = () => {
   const [waehrungen, setWaehrungen] = useState<string[]>([]);
   const [isloading, setisloading] = useState(false);
@@ -263,6 +266,29 @@ const Home: React.FC = () => {
                       checked={darkmode.isDarkMode}
                       color="medium"
                     />
+                  </IonItem>
+                </IonCardContent>
+              </IonCard>
+            </IonCol>
+            <IonCol>
+              <IonCard>
+                <IonCardHeader>
+                  <IonCardTitle>Infos</IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent>
+                  <IonItem>
+                    <IonLabel>Autor</IonLabel>
+                    <IonText>{packageJson.author.name}</IonText>
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel>Version</IonLabel>
+                    <IonText>{packageJson.version}</IonText>
+                  </IonItem>
+                  <IonItem>
+                    <IonLabel>Kontakt</IonLabel>
+                    <IonButton href="mailto:dev@toastbrot.org">
+                      E-Mail
+                    </IonButton>
                   </IonItem>
                 </IonCardContent>
               </IonCard>
