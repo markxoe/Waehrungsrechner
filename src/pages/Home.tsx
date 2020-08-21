@@ -21,6 +21,7 @@ import {
   IonToggle,
   IonSelectOption,
   IonProgressBar,
+  useIonViewWillEnter,
 } from "@ionic/react";
 import React, { useState, useEffect } from "react";
 
@@ -107,6 +108,7 @@ const Home: React.FC = () => {
     { InputVal },
     { dataDate },
   ]);
+  useIonViewWillEnter(() => loadData());
   return (
     <IonPage>
       <IonHeader>
