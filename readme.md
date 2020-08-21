@@ -20,3 +20,9 @@
 ## Autor
 
 Mark Oude Elberink
+
+## Changelog
+
+### [0.1.0] Initialer Release
+
+- Initialer Release
