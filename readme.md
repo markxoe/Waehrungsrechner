@@ -1,5 +1,7 @@
 # Währungsrechner
 
+![GitHub package.json version](https://img.shields.io/github/package-json/v/markxoe/Waehrungsrechner?style=flat-square)
+
 ## Installation
 
 ### Benötigt
