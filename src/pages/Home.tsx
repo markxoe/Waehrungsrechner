@@ -30,6 +30,8 @@ import { Storage } from "@capacitor/core";
 
 import packageJson from "../../package.json";
 
+import "./Home.css";
+
 const Home: React.FC = () => {
   const [waehrungen, setWaehrungen] = useState<string[]>([]);
   const [isloading, setisloading] = useState(false);
@@ -221,6 +223,7 @@ const Home: React.FC = () => {
                       placeholder="Eingabe"
                       type="number"
                       value={InputVal}
+                      className={"WaehrungEingabe"}
                       onIonChange={(e) => {
                         setInputVal(
                           e.detail.value ? parseInt(e.detail.value) : undefined
@@ -263,6 +266,7 @@ const Home: React.FC = () => {
                       placeholder="Ausgabe"
                       value={OutputVal?.toFixed(4)}
                       disabled={true}
+                      className={"WaehrungEingabe"}
                     />
                     <IonSelect
                       interfaceOptions={{
