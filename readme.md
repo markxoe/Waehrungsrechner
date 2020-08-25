@@ -25,6 +25,12 @@ Mark Oude Elberink
 
 ## Changelog
 
+### [0.2.0] Offline Support
+
+- Offline Unterstützung
+- Neues Logo
+- Input Größer
+
 ### [0.1.0] Initialer Release
 
 - Initialer Release
