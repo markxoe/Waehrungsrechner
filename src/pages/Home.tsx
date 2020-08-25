@@ -26,7 +26,11 @@ import React, { useState, useEffect } from "react";
 
 import darkmode from "../functions/darkmode";
 
+import { Storage } from "@capacitor/core";
+
 import packageJson from "../../package.json";
+
+import "./Home.css";
 
 const Home: React.FC = () => {
   const [waehrungen, setWaehrungen] = useState<string[]>([]);
@@ -41,6 +45,7 @@ const Home: React.FC = () => {
 
   const loadData = async () => {
     setisloading(true);
+    var success = false;
     const data = await fetch("https://api.exchangeratesapi.io/latest").then(
       (e) => e,
       () => null
@@ -54,6 +59,8 @@ const Home: React.FC = () => {
           date: string;
         } = JSON.parse(daa);
 
+        MemorySaveData(jsondata);
+
         setDataDate(new Date(jsondata.date).toLocaleDateString());
 
         var _allRates = jsondata.rates;
@@ -63,14 +70,63 @@ const Home: React.FC = () => {
         const _waeherungen: string[] = Object.keys(_allRates);
         setWaehrungen(_waeherungen);
 
-        addToast("Daten Geladen");
-      } else {
-        addToast("Fehler beim Laden: " + data.status);
+        success = true;
       }
+    }
+    if (success) {
+      addToast("Daten Geladen");
     } else {
-      addToast("Fehler beim Laden");
+      MemoryLoadData().then((e) => {
+        if (e !== 0) {
+          setDataDate(new Date(e.date).toLocaleDateString());
+
+          var _allRates = e.rates;
+          _allRates[e.base] = 1;
+          setAllRates(_allRates);
+
+          const _waeherungen: string[] = Object.keys(_allRates);
+          setWaehrungen(_waeherungen);
+          addToast("Daten vom Speicher Geladen");
+        } else {
+          addToast("Fehler beim Laden");
+        }
+      });
     }
     setisloading(false);
+  };
+
+  const MemoryLoadData = async () => {
+    var out: {
+      rates: { [id: string]: number };
+      base: string;
+      date: string;
+    };
+    var mem = await Storage.get({
+      key: "o.t.waehrungsrechner",
+    });
+    if (mem.value.length > 0) {
+      try {
+        out = JSON.parse(mem.value);
+        return out;
+      } catch {
+        return 0;
+      }
+    } else {
+      return 0;
+    }
+  };
+
+  const MemorySaveData = async (data: {
+    rates: { [id: string]: number };
+    base: string;
+    date: string;
+  }) => {
+    // Saving the Raw data from API as JSON String
+    const tosave = JSON.stringify(data);
+    return Storage.set({
+      key: "o.t.waehrungsrechner",
+      value: tosave,
+    });
   };
 
   const calc = () => {
@@ -167,6 +223,7 @@ const Home: React.FC = () => {
                       placeholder="Eingabe"
                       type="number"
                       value={InputVal}
+                      className={"WaehrungEingabe"}
                       onIonChange={(e) => {
                         setInputVal(
                           e.detail.value ? parseInt(e.detail.value) : undefined
@@ -209,6 +266,7 @@ const Home: React.FC = () => {
                       placeholder="Ausgabe"
                       value={OutputVal?.toFixed(4)}
                       disabled={true}
+                      className={"WaehrungEingabe"}
                     />
                     <IonSelect
                       interfaceOptions={{
