@@ -25,6 +25,10 @@ Mark Oude Elberink
 
 ## Changelog
 
+### [0.2.1] Unbenutzte Berechtigungen
+
+- Fix: Unbenutzte Berechtigungen
+
 ### [0.2.0] Offline Support
 
 - Offline Unterstützung
