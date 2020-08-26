@@ -73,24 +73,26 @@ const Home: React.FC = () => {
         success = true;
       }
     }
+
     if (success) {
       addToast("Daten Geladen");
     } else {
-      MemoryLoadData().then((e) => {
-        if (e !== 0) {
-          setDataDate(new Date(e.date).toLocaleDateString());
+      const data = await MemoryLoadData();
 
-          var _allRates = e.rates;
-          _allRates[e.base] = 1;
-          setAllRates(_allRates);
+      if (data !== 0) {
+        setDataDate(new Date(data.date).toLocaleDateString());
 
-          const _waeherungen: string[] = Object.keys(_allRates);
-          setWaehrungen(_waeherungen);
-          addToast("Daten vom Speicher Geladen");
-        } else {
-          addToast("Fehler beim Laden");
-        }
-      });
+        var _allRates = data.rates;
+        _allRates[data.base] = 1;
+        setAllRates(_allRates);
+
+        const _waeherungen: string[] = Object.keys(_allRates);
+        setWaehrungen(_waeherungen);
+
+        addToast("Daten vom Speicher Geladen");
+      } else {
+        addToast("Fehler beim Laden");
+      }
     }
     setisloading(false);
   };
